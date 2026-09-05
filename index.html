@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#0B4F49">
+<title>VerteilerWahr</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="VerteilerWahr">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="blob1"></div><div class="blob2"></div>
+  <div class="hero-inner">
+    <span class="eyebrow">JANS APPS · WEITERGABE</span>
+    <h1>VerteilerWahr</h1>
+    <p class="hero-sub">Apps auswählen, Link per Mail verschicken, Überblick behalten.</p>
+  </div>
+  <button class="theme-toggle" id="theme-toggle" aria-label="Dunkelmodus umschalten"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+</header>
+
+<main>
+
+  <!-- SCHRITT 1: NEUE SENDUNG -->
+  <section class="card" id="send-card">
+    <div class="card-head">
+      <span class="pill-num">1</span>
+      <h2>Neue Sendung</h2>
+    </div>
+
+    <div id="app-checklist" class="app-checklist">
+      <!-- wird per JS befüllt -->
+    </div>
+    <div class="empty-state" id="no-apps-hint" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5h16v14H4z"/><path d="M4 6l8 7 8-7"/></svg>
+      <p>Noch keine Apps hinterlegt — unten unter „Meine Apps“ zuerst welche anlegen.</p>
+    </div>
+
+    <div class="field">
+      <label for="recipient-name">Name (optional)</label>
+      <input type="text" id="recipient-name" placeholder="z. B. Markus">
+    </div>
+    <div class="field">
+      <label for="recipient-email">E-Mail-Adresse des Empfängers</label>
+      <input type="email" id="recipient-email" placeholder="name@beispiel.de">
+    </div>
+
+    <button class="btn-primary" id="prepare-mail-btn">Mail vorbereiten</button>
+    <p class="hint">Öffnet dein Mailprogramm mit fertigem Text — du prüfst und drückst selbst „Senden“.</p>
+    <button class="btn-secondary" id="share-btn" hidden>Anders teilen (WhatsApp, Nachrichten …)</button>
+  </section>
+
+  <!-- SCHRITT 2: MEINE APPS VERWALTEN -->
+  <section class="card" id="manage-card">
+    <div class="card-head">
+      <span class="pill-num">2</span>
+      <h2>Meine Apps</h2>
+    </div>
+    <div class="toolbar-row">
+      <button class="btn-tertiary" id="export-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Sichern</button>
+      <button class="btn-tertiary" id="import-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Wiederherstellen</button>
+      <input type="file" id="import-file" accept="application/json" hidden>
+    </div>
+
+    <div id="app-manage-list" class="app-manage-list"></div>
+
+    <div class="add-app-form">
+      <div class="field">
+        <label for="new-app-name">App-Name</label>
+        <input type="text" id="new-app-name" placeholder="z. B. Glyxora">
+      </div>
+      <div class="field">
+        <label for="new-app-url">Link (URL)</label>
+        <input type="url" id="new-app-url" placeholder="https://…">
+      </div>
+      <div class="field">
+        <label for="new-app-note">Kurzbeschreibung (optional)</label>
+        <input type="text" id="new-app-note" placeholder="z. B. Kristall-Puzzle-Spiel">
+      </div>
+      <button class="btn-secondary" id="add-app-btn">App hinzufügen</button>
+      <button class="btn-link" id="cancel-edit-btn" hidden>Bearbeiten abbrechen</button>
+    </div>
+  </section>
+
+  <!-- SCHRITT 3: VERLAUF -->
+  <section class="card card-history" id="history-card">
+    <div class="card-head">
+      <span class="pill-num">3</span>
+      <h2>Versand-Verlauf</h2>
+    </div>
+    <p class="hint">Nur als Gedächtnisstütze für dich — es wird nichts automatisch verschickt oder abgeglichen.</p>
+    <div id="history-list" class="history-list"></div>
+    <div class="empty-state" id="no-history-hint" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      <p>Noch keine Sendungen protokolliert.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="app-footer">
+  <a href="impressum.html">Impressum</a>
+  <span aria-hidden="true">·</span>
+  <a href="datenschutz.html">Datenschutz</a>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
